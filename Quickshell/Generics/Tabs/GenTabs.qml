@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Layouts
-import qs.Settings
+import qs.Services
 
 Item {
     id: root

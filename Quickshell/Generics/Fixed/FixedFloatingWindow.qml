@@ -1,5 +1,5 @@
 import Quickshell
-import qs.Settings
+import qs.Services
 import QtQuick
 
 FloatingWindow {

@@ -1,6 +1,6 @@
 import QtQuick
 import Quickshell
-import qs.Settings
+import qs.Services
 
 PanelWindow {
     anchors {

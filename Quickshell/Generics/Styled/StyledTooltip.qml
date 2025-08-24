@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Window
-import qs.Settings
+import qs.Services
 
 Window {
     id: tooltipWindow

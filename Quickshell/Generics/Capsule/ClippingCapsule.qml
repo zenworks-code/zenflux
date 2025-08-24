@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Widgets
-import qs.Settings
+import qs.Services
 
 ClippingRectangle {
     radius: Settings.settings.hasRadius ? height / 2 : 0

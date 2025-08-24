@@ -1,7 +1,7 @@
 import QtQuick
 import Quickshell
 import Quickshell.Widgets
-import qs.Settings
+import qs.Services
 
 Rectangle {
     radius: Settings.settings.hasRadius ? 16 : 0

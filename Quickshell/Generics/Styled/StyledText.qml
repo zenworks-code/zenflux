@@ -1,4 +1,4 @@
-import qs.Settings
+import qs.Services
 import QtQuick
 import QtQuick.Layouts
 

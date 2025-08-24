@@ -1,6 +1,6 @@
 import qs.Components
 import qs.Services
-import qs.Settings
+import qs.Services
 import QtQuick
 import QtQuick.Effects
 import QtQuick.Controls

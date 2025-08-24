@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import Quickshell
-import qs.Settings
+import qs.Services
 
 import QtQuick.Controls.Basic
 

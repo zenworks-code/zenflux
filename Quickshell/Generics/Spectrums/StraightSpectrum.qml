@@ -1,6 +1,6 @@
 import QtQuick
 import qs.Components
-import qs.Settings
+import qs.Services
 import qs.Services
 
 Item {

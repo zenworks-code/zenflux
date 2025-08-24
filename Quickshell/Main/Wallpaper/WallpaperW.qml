@@ -24,7 +24,7 @@ Variants {
                 id: img
 
                 height: parent.height
-                path: Settings.options.wallpaper
+                path: Settings.options.wallpaper.path
                 width: parent.width
             }
 

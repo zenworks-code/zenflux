@@ -107,65 +107,20 @@ FixedRect {
         flickableDirection: Flickable.VerticalFlick
 
         Column {
-            id: collie
-            anchors.fill: parent
-            GridLayout {
-                Layout.preferredWidth: flickey.width
-                Layout.preferredHeight: flickey.height
-                Layout.minimumWidth: flickey.width
-                Layout.minimumHeight: flickey.height
+            height: parent.height
 
-                columns: 4
-                columnSpacing: 16
-                rowSpacing: 16
+            Repeater {
+                model: flickey.items
+                delegate: Item {
+                    width: flickey.width
+                    height: flickey.pageHeight
 
-                BrightnessSlider {
-                    Layout.rowSpan: 2
-                    Layout.columnSpan: 1
-                    monitor: Brightness.getMonitorForScreen(root.screen)
+                    // Access the current item with modelData
+                    Loader {
+                        anchors.fill: parent
+                        sourceComponent: modelData
+                    }
                 }
-                VolumeSlider {
-                    Layout.rowSpan: 2
-                    Layout.columnSpan: 1
-                    monitor: Brightness.getMonitorForScreen(root.screen)
-                }
-                BatteryWidget {
-                    Layout.columnSpan: 2  // Explicitly span 2 columns
-                    monitor: Brightness.getMonitorForScreen(root.screen)
-                    Layout.alignment: Qt.AlignTop
-                }
-                LockModule {
-                    Layout.columnSpan: 1  // Prevent it from expanding
-                }
-                CoolClock {
-
-                    Layout.columnSpan: 2  // Explicitly span 2 columns
-                }
-            }
-
-            Item {
-                width: flickey.width
-                height: flickey.pageHeight
-                StyledText {
-                    text: "Page 2"
-                    anchors.centerIn: parent
-                    font.pixelSize: 24
-                }
-            }
-
-            Item {
-                width: flickey.width
-                height: flickey.pageHeight
-                StyledText {
-                    text: "Page 3"
-                    anchors.centerIn: parent
-                    font.pixelSize: 24
-                }
-            }
-            Item {
-                width: flickey.width
-                height: flickey.pageHeight
-                NotchWifi {}
             }
         }
     }

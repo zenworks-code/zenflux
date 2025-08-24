@@ -1,7 +1,7 @@
 import Quickshell
 import QtQuick
 import Quickshell.Wayland
-import qs.Settings
+import qs.Services
 
 PanelWindow {
     id: outerPanel

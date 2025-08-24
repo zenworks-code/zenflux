@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Settings
+import qs.Services
 
 Item {
     id: root
