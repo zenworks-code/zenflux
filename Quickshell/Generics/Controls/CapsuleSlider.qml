@@ -1,12 +1,12 @@
-import qs.Components
+import qs.Generics
 import qs.Services
 import qs.Services
 import QtQuick
 import QtQuick.Effects
 import QtQuick.Controls
 
-import qs.Components.Icons
-import qs.Components.Styled
+import qs.Generics.Icons
+import qs.Generics.Styled
 
 Slider {
     id: root

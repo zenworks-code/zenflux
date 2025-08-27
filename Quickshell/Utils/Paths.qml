@@ -26,6 +26,9 @@ Singleton {
     readonly property string videoPath: `${home}/Videos`
     readonly property string profileImage: `${home}/.face`
     readonly property string wallpaperDir: `${home}/Wallpapers`
+    readonly property string wallustDir: `${shellLocation}/Utils/Themes`
+
+    property string wallpaperPath: ""
     function stringify(path: url): string {
         return path.toString().replace(/%20/g, " ");
     }

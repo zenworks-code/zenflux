@@ -1,41 +1,59 @@
 pragma Singleton
+
 import QtQuick
 import Qt.labs.folderlistmodel
 import Quickshell
 import Quickshell.Io
+import qs.Utils
 
 Singleton {
-    id: manager
+    id: root
 
-    Item {
-        Component.onCompleted: {
-            loadWallpapers();
-            setCurrentWallpaper(currentWallpaper, true);
-            toggleRandomWallpaper();
-        }
+    Component.onCompleted: {
+        Logger.log("Wallpapers", "Service started");
+        listWallpapers();
     }
-    property string wallpaperDirectory: Settings.settings.wallpaperFolder
-    property var wallpaperList: []
-    property string currentWallpaper: Settings.settings.currentWallpaper
-    property bool scanning: false
-    property string transitionType: Settings.settings.transitionType
-    property var randomChoices: ["fade", "left", "right", "top", "bottom", "wipe", "wave", "grow", "center", "any", "outer"]
 
-    function loadWallpapers() {
+    property var wallpaperList: []
+    property string currentWallpaper: Settings.data.wallpaper.path
+    property bool scanning: false
+
+    function listWallpapers() {
+        Logger.log("Wallpapers", "Listing wallpapers");
         scanning = true;
         wallpaperList = [];
+        // Unsetting, then setting the folder will re-trigger the parsing!
         folderModel.folder = "";
-        folderModel.folder = "file://" + (Settings.settings.wallpaperFolder !== undefined ? Settings.settings.wallpaperFolder : "");
+        folderModel.folder = "file://" + (Settings.data.wallpaper.directory !== undefined ? Settings.data.wallpaper.directory : "");
     }
 
     function changeWallpaper(path) {
-        setCurrentWallpaper(path);
+        Logger.log("Wallpapers", "Changing to:", path);
+        setCurrentWallpaper(path, false);
     }
 
     function setCurrentWallpaper(path, isInitial) {
+        // Only regenerate colors if the wallpaper actually changed
+        var wallpaperChanged = currentWallpaper !== path;
+
+        changeWallpaperProcess.running = true;
         currentWallpaper = path;
-        generateTheme();
-        Settings.settings.currentWallpaper = path;
+        Settings.data.wallpaper.path = path;
+        if (Settings.data.wallpaper.swww.enabled) {
+            if (Settings.data.wallpaper.swww.transitionType === "random") {
+                transitionType = randomChoices[Math.floor(Math.random() * randomChoices.length)];
+            } else {
+                transitionType = Settings.data.wallpaper.swww.transitionType;
+            }
+        } else
+
+        // Fallback: update the settings directly for non-SWWW mode
+        //Logger.log("Wallpapers", "Not using Swww, setting wallpaper directly");
+        {}
+
+        if (randomWallpaperTimer.running) {
+            randomWallpaperTimer.restart();
+        }
     }
 
     function setRandomWallpaper() {
@@ -44,32 +62,28 @@ Singleton {
         if (!randomPath) {
             return;
         }
-        setCurrentWallpaper(randomPath);
+        setCurrentWallpaper(randomPath, false);
     }
 
     function toggleRandomWallpaper() {
-        if (Settings.settings.randomWallpaper && !randomWallpaperTimer.running) {
+        if (Settings.data.wallpaper.isRandom && !randomWallpaperTimer.running) {
             randomWallpaperTimer.start();
             setRandomWallpaper();
-        } else if (!Settings.settings.randomWallpaper && randomWallpaperTimer.running) {
+        } else if (!Settings.data.randomWallpaper && randomWallpaperTimer.running) {
             randomWallpaperTimer.stop();
         }
     }
 
     function restartRandomWallpaperTimer() {
-        if (Settings.settings.randomWallpaper) {
+        if (Settings.data.wallpaper.isRandom) {
             randomWallpaperTimer.stop();
             randomWallpaperTimer.start();
         }
     }
 
-    function generateTheme() {
-        generateThemeProcess.running = true;
-    }
-
     Timer {
         id: randomWallpaperTimer
-        interval: Settings.settings.wallpaperInterval * 1000
+        interval: Settings.data.wallpaper.randomInterval * 1000
         running: false
         repeat: true
         onTriggered: setRandomWallpaper()
@@ -78,25 +92,32 @@ Singleton {
 
     FolderListModel {
         id: folderModel
-        nameFilters: ["*.avif", "*.jpg", "*.jpeg", "*.png", "*.gif", "*.pnm", "*.tga", "*.tiff", "*.webp", "*.bmp", "*.farbfeld"]
+        // Swww supports many images format but Quickshell only support a subset of those.
+        nameFilters: ["*.jpg", "*.jpeg", "*.png", "*.gif", "*.pnm", "*.bmp"]
         showDirs: false
         sortField: FolderListModel.Name
         onStatusChanged: {
             if (status === FolderListModel.Ready) {
                 var files = [];
                 for (var i = 0; i < count; i++) {
-                    var fileph = (Settings.settings.wallpaperFolder !== undefined ? Settings.settings.wallpaperFolder : "") + "/" + get(i, "fileName");
-                    files.push(fileph);
+                    var directory = (Settings.data.wallpaper.directory !== undefined ? Settings.data.wallpaper.directory : "");
+                    var filepath = directory + "/" + get(i, "fileName");
+                    files.push(filepath);
                 }
                 wallpaperList = files;
                 scanning = false;
+                Logger.log("Wallpapers", "List refreshed, count:", wallpaperList.length);
             }
         }
     }
 
     Process {
-        id: generateThemeProcess
-        command: ["wallust", "run", currentWallpaper, "-u", "-k", "-d", "/home/zen/zenflow/quickshell/Themes"]
+        id: changeWallpaperProcess
+        command: ["wallust", "run", currentWallpaper, "-u", "-k", "-d", "/home/zen/zenflux/Quickshell/Utils/Themes"]
         running: false
+
+        stdout: StdioCollector {
+            onStreamFinished: console.log(`WallP is ${currentWallpaper}`)
+        }
     }
 }

@@ -1,14 +1,13 @@
 import QtQuick
-import Quickshell
+import qs.Services
 
 Flickable {
     id: flickey
-    anchors.fill: parent
     anchors.margins: 20
     clip: true
 
     // Enable horizontal scrolling for swipe functionality
-    contentWidth: parent.width * 3
+    contentWidth: parent.width * row.children.length
     contentHeight: parent.height
 
     // Snap properties
@@ -16,7 +15,8 @@ Flickable {
     property real pageWidth: width
     property bool snapping: false
 
-    required property var items
+    // Change this line - use 'list' to allow multiple values
+    property list<Component> items
 
     // Sync with tab selection
     onCurrentIndexChanged: {
@@ -29,14 +29,12 @@ Flickable {
     function snapToPage(index) {
         snapping = true;
         contentX = index * pageWidth;
-        settingsTabs.currentIndex = index;
         snapping = false;
     }
 
     // Handle snapping when flicking stops
     onFlickEnded: {
         var targetIndex = calculateTargetIndex();
-
         if (targetIndex !== currentIndex) {
             currentIndex = targetIndex;
             snapToPage(targetIndex);
@@ -47,7 +45,6 @@ Flickable {
     onMovementEnded: {
         if (!flickingHorizontally) {
             var targetIndex = calculateTargetIndex();
-
             if (targetIndex !== currentIndex) {
                 currentIndex = targetIndex;
             }
@@ -82,12 +79,11 @@ Flickable {
     }
 
     // Enable smooth transitions
-    // FadeBehavior on contentX {}
     Behavior on contentX {
         enabled: flickey.snapping
         NumberAnimation {
-            duration: 300
-            easing.type: Easing.InQuad
+            duration: Settings.data.animation.duration
+            easing.type: Easing.OutBack
         }
     }
 
@@ -96,15 +92,14 @@ Flickable {
     flickableDirection: Flickable.HorizontalFlick
 
     Row {
-        height: parent.height
-
+        id: row
+        anchors.fill: parent
         Repeater {
             model: flickey.items
             delegate: Item {
                 width: flickey.pageWidth
                 height: flickey.height
 
-                // Access the current item with modelData
                 Loader {
                     anchors.fill: parent
                     sourceComponent: modelData

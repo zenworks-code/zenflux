@@ -2,7 +2,7 @@ import Quickshell
 import qs.Services
 import qs.Main.Wallpaper
 import qs.Main.Notch
-import qs.Main.Menu
+import qs.Main
 
 ShellRoot {
 
@@ -15,5 +15,6 @@ ShellRoot {
         active: Settings.data.enable.notch
         component: Notch {}
     }
-    Menu {}
+
+    MainPanel {}
 }

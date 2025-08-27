@@ -21,13 +21,12 @@ Singleton {
         for (var i = 0; i < Quickshell.screens.length; i++) {
             availableScreenNames.push(Quickshell.screens[i].name);
         }
-
         Logger.log("Settings", "Available monitors: [" + availableScreenNames.join(", ") + "]");
         Logger.log("Settings", "Configured bar monitors: [" + adapter.bar.monitors.join(", ") + "]");
     }
 
     FileView {
-        path: settingsFile
+        path: Paths.settingsFile
         watchChanges: true
         onFileChanged: reload()
         onAdapterUpdated: writeAdapter()
@@ -65,12 +64,18 @@ Singleton {
             property JsonObject general: JsonObject {
                 property string avatarImage: Paths.profileImage
                 property bool dimDesktop: false
-                property bool showScreenCorners: false
-                property real radiusRatio: 1.0
+                property bool showRadius: false
+                property real margin: 16
+            }
+
+            property JsonObject animation: JsonObject {
+                property int duration: 300
+                property string type: "OutBack"
+                property double overshoot: 1.1
             }
 
             property JsonObject enable: JsonObject {
-                property bool background: false
+                property bool wallpaper: true
                 property bool applauncher: false
                 property bool wallpaperswitcher: false
                 property bool lock: false
@@ -112,9 +117,9 @@ Singleton {
 
             // wallpaper
             property JsonObject wallpaper: JsonObject {
-                property string directory: Paths.wallpaperDir
+                property string directory: "/home/zen/Wallpapers"
                 property string path: ""
-                property bool isRandom: false
+                property bool isRandom: true
                 property int randomInterval: 300
                 onDirectoryChanged: WallpaperService.listWallpapers()
                 onIsRandomChanged: WallpaperService.toggleRandomWallpaper()

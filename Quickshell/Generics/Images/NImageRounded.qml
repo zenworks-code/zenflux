@@ -1,6 +1,6 @@
 import QtQuick
 import QtQuick.Effects
-import qs.Components.Icons
+import qs.Generics.Icons
 
 Rectangle {
   id: root

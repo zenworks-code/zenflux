@@ -2,6 +2,7 @@ import Quickshell
 import Quickshell.Wayland
 import QtQuick
 import qs.Services
+import qs.Utils
 
 Variants {
     model: Quickshell.screens
@@ -24,7 +25,7 @@ Variants {
                 id: img
 
                 height: parent.height
-                path: Settings.options.wallpaper.path
+                path: Paths.wallpaperDir + "/macintosh.jpg"
                 width: parent.width
             }
 

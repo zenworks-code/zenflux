@@ -1,7 +1,7 @@
 import QtQuick
 import QtQuick.Layouts
 import qs.Services
-import qs.Components.Icons
+import qs.Generics.Icons
 
 Item {
     id: root
@@ -53,21 +53,21 @@ Item {
 
                         Behavior on x {
                             XAnimator {
-                                duration: Settings.settings.animationDuration
+                                duration: Settings.data.animation.duration
                                 easing.overshoot: 0.1
                                 easing.type: Easing.OutBack
                             }
                         }
                         Behavior on color {
                             ColorAnimation {
-                                duration: Settings.settings.animationDuration
+                                duration: Settings.data.animation.duration
                                 easing.overshoot: 0.1
                                 easing.type: Easing.OutBack
                             }
                         }
                         Behavior on opacity {
                             OpacityAnimator {
-                                duration: Settings.settings.animationDuration
+                                duration: Settings.data.animation.duration
                                 easing.overshoot: 0.1
                                 easing.type: Easing.OutBack
                             }

@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Components.Styled
+import qs.Generics.Styled
 
 StyledRect {
     width: parent.width - 32

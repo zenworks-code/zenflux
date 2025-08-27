@@ -1,5 +1,5 @@
 import QtQuick
-import qs.Components
+import qs.Generics
 import qs.Services
 import qs.Services
 

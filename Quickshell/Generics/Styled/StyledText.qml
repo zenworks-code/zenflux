@@ -1,12 +1,12 @@
 import qs.Services
+import qs.Utils.Themes
 import QtQuick
-import QtQuick.Layouts
 
 Text {
     verticalAlignment: Text.AlignVCenter
     font {
-        family: Theme.fontFamily
+        family: Settings.data.ui.fontDefault
         pointSize: 12
     }
-    color: Settings.settings.darkMode ? Theme.textPrimary : Theme.backgroundPrimary
+    color: Settings.data.colorSchemes.darkMode ? Theme.textPrimary : Theme.backgroundPrimary
 }
